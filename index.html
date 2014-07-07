@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script src="//code.jquery.com/jquery-2.0.0.js"></script>
+    <style>
+     #map {
+       background-color: #fff;
+       border: 1px solid #ccc;
+     }
+     .background {
+       fill: none;
+       pointer-events: all;
+     }
+     #countries, #states {
+       fill: #cde;
+       stroke: #fff;
+       stroke-linejoin: round;
+       stroke-linecap: round;
+     }
+     #countries .active, #states .active {
+       fill: #89a;
+     }
+     #cities {
+       stroke-width: 0;
+     }
+
+      path {
+      fill: blue;
+      stroke: white;
+      stroke-width:.03em;
+      cursor: pointer; cursor: hand; 
+      }
+     path:hover {
+       fill: red;
+     }
+     .city {
+       fill: #345;
+       stroke: #fff;
+     }
+     pre.prettyprint {
+       border: 1px solid #ccc;
+       margin-bottom: 0;
+       padding: 9.5px;
+     }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="//d3js.org/topojson.v1.min.js"></script>
+    <script>
+     var m_width = $("#map").width(),
+     country,
+     state;
+
+     var svg = d3.select("#map").append("svg")
+		 .attr("width", 1000)
+		 .attr("height", 1000);
+     
+
+     d3.json("json/or_counties.json", function(error, or) {
+       if (error) return console.error(error);
+       console.log("or",or);
+//       var me= topojson.feature(or, or.objects.or_counties);
+  //     console.log("me",me);
+       svg.append("g")
+	  .attr("id", "oregon")
+	  .selectAll("path")
+	  .data(or.features)
+		  .enter()
+       
+       .append("path")
+       .attr("id", function(d) { return d.properties.name; })
+    .attr("d", d3.geo.path().projection(d3.geo.mercator().center([-120.0,44.6680829]).scale(5000)));
+
+     });
+
+     
+    </script>
+  </body>
+</html>
